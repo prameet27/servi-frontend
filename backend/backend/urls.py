@@ -17,8 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from services import views
+from django.contrib.auth.views import LoginView
+
+class CustomAdminLoginView(LoginView):
+    def get_success_url(self):
+        return 'http://localhost:3000/admin/dashboard/'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('admin/login/', CustomAdminLoginView.as_view(), name='admin_login'),
+    path('api/register/', views.register),
+    path('api/login/', views.login_view),
     path('api/services/', views.service_list), 
+    path('api/services/create/', views.create_service),
+    path('api/services/mine/', views.my_services),
+    path('api/services/<int:pk>/approve/', views.approve_service),
+    path('api/services/pending/', views.pending_services),
 ]
